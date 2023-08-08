@@ -8,6 +8,9 @@
 #define NUM_LEDS 44
 #define BRIGHTNESS 100
 
+#define SECONDS_PER_PATTERN 20
+#define NUM_MODES 3
+
 CRGB leds[NUM_LEDS];
 uint8_t twinkleBrightness[NUM_LEDS];
 
@@ -31,8 +34,23 @@ void loop() {
   FastLED.clear();
   palette.cycle();
 
-  ripple();
-  // spiral();
+  static int mode = 0;
+
+  EVERY_N_SECONDS(SECONDS_PER_PATTERN) {
+    mode = (mode + 1) % NUM_MODES;
+  }
+
+  switch (mode) {
+    case 0:
+    twinkle();
+    break;
+    case 1:
+    ripple();
+    break;
+    case 2:
+    spiral();
+    break;
+  }
 
   FastLED.setBrightness(BRIGHTNESS);
   FastLED.show();
