@@ -1,5 +1,5 @@
 #define MAX_PALETTE_INDEX 240
-#define SECONDS_PER_PALETTE 20
+#define SECONDS_PER_PALETTE 15
 
 class Palette {
 private:
@@ -29,8 +29,14 @@ public:
     }
   }
 
-  CRGB mapToColor(int value, int fromLow, int fromHigh) {
-    uint8_t paletteIndex = map(value, fromLow, fromHigh, 0, MAX_PALETTE_INDEX);
+  CRGB mapToColor(float value, float fromLow, float fromHigh) {
+    float middle = fromLow + ((fromHigh - fromLow) / 2);
+    int paletteIndex;
+    if (value < middle) {
+      paletteIndex = map(value, fromLow, middle, 0, MAX_PALETTE_INDEX);
+    } else {
+      paletteIndex = map(value, middle, fromHigh, MAX_PALETTE_INDEX, 0);
+    }
     return ColorFromPalette(_currentPalette, paletteIndex);
   }
 

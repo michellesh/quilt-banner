@@ -31,8 +31,8 @@ void loop() {
   FastLED.clear();
   palette.cycle();
 
-  // ripple();
-  spiral();
+  ripple();
+  // spiral();
 
   FastLED.setBrightness(BRIGHTNESS);
   FastLED.show();
@@ -68,10 +68,10 @@ void spiral() {
   float thickness = 50;
 
   for (int i = 0; i < NUM_LEDS; i++) {
-    float diffAngle = getAngleDiff(targetAngle, angle[i], thickness);
+    float diffAngle = getAngleDiff(targetAngle, ANGLE[i], thickness);
     if (diffAngle < thickness) {
       int brightness = map(diffAngle, 0, thickness, 255, 0);
-      leds[i] = palette.getColor(i);
+      leds[i] = palette.mapToColor(ANGLE[i], 0, 360);
       leds[i].nscale8(brightness);
     } else {
       leds[i] = CRGB::Black;
@@ -85,22 +85,22 @@ void spiral() {
 }
 
 void ripple() {
-  static float targetRadius = 0;
   float thickness = 50;
+  static float targetRadius = MIN_RADIUS - thickness;
 
   for (int i = 0; i < NUM_LEDS; i++) {
-    float diff = abs(targetRadius - radius[i]);
+    float diff = abs(targetRadius - RADIUS[i]);
     if (diff < thickness) {
       int brightness = map(diff, 0, thickness, 255, 0);
-      leds[i] = palette.getColor(i);
+      leds[i] = palette.mapToColor(RADIUS[i], MIN_RADIUS, MAX_RADIUS);
       leds[i].nscale8(brightness);
     } else {
       leds[i] = CRGB::Black;
     }
   }
   targetRadius += 0.2;
-  if (targetRadius > maxRadius + thickness) {
-    targetRadius = 0;
+  if (targetRadius > MAX_RADIUS + thickness) {
+    targetRadius = MIN_RADIUS - thickness;
   }
 }
 
