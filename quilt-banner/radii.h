@@ -1,7 +1,7 @@
 float maxRadius = 261;
 float radius[NUM_LEDS];
 
-void setRadii() {
+void initRadii() {
   radius[0] = 261;
   radius[1] = 215;
   radius[2] = 145;
